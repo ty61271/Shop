@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "57502615316",
+    "firebase_url": "https://hahowlearnshop.firebaseio.com",
+    "project_id": "hahowlearnshop",
+    "storage_bucket": "hahowlearnshop.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:57502615316:android:3e5b2c52d5a879bf",
+        "android_client_info": {
+          "package_name": "com.west.pratice.shop"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "57502615316-clg9pkm5ibgee2knjmn68s0g7jcd9hk7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.west.pratice.shop",
+            "certificate_hash": "464b37170c134a4092edd9138656b20bb820706d"
+          }
+        },
+        {
+          "client_id": "57502615316-e91bmh7aavohfmtuaoeeiv4n9ij7appm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDg7ZqSYWcLvXQ0vtg3l61vqvz-fwFI5lI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "57502615316-e91bmh7aavohfmtuaoeeiv4n9ij7appm.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
