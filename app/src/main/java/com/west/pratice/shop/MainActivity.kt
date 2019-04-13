@@ -1,5 +1,6 @@
 package com.west.pratice.shop
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -10,8 +11,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
-    private val RC_SIGNUP: Int=200
-    var signup=false
+    private val RC_NICK: Int = 210
+    private val RC_SIGNUP: Int = 200
+    var signup = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,14 +25,23 @@ class MainActivity : AppCompatActivity() {
                 .setAction("Action", null).show()
         }
 
-        if(!signup){
-            val intent=Intent(this,SignUpActivity::class.java)
-            startActivityForResult(intent,RC_SIGNUP)
+        if (!signup) {
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivityForResult(intent, RC_SIGNUP)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RC_SIGNUP) {
+            if (resultCode == Activity.RESULT_OK) {
+                val intent = Intent(this, NicknameActivity::class.java)
+                startActivityForResult(intent, RC_NICK)
+            }
+        }
+        if (requestCode == RC_NICK) {
+
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
