@@ -22,6 +22,7 @@ import kotlinx.android.synthetic.main.row_funtion.view.*
 
 class MainActivity : AppCompatActivity() {
 
+    private val TAG = MainActivity::class.java.simpleName
     private val RC_NICK: Int = 210
     private val RC_SIGNUP: Int = 200
     var signup = false
@@ -93,8 +94,18 @@ class MainActivity : AppCompatActivity() {
 
         override fun onBindViewHolder(holder: FuntionHolder, position: Int) {
             holder.nameText.text = funtions[position]
+            holder.itemView.setOnClickListener {
+                functionClicked(holder, position)
+            }
         }
 
+    }
+
+    private fun functionClicked(holder: FuntionHolder, position: Int) {
+        Log.d(TAG, "functionClicked: $position")
+        when (position) {
+            1 -> startActivity(Intent(this, ContactActivity::class.java))
+        }
     }
 
     class FuntionHolder(view: View) : RecyclerView.ViewHolder(view) {
