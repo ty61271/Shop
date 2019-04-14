@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         "Parking",
         "Download coupons",
         "News",
-        "A",
+        "Movies",
         "B",
         "News",
         "News",
@@ -106,6 +106,7 @@ class MainActivity : AppCompatActivity() {
         when (position) {
             1 -> startActivity(Intent(this, ContactActivity::class.java))
             2 -> startActivity(Intent(this, ParkingActivity::class.java))
+            5 -> startActivity(Intent(this, MovieActivity::class.java))
         }
     }
 
