@@ -4,12 +4,12 @@ import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
+import android.view.*
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -18,6 +18,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.row_funtion.view.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,6 +26,19 @@ class MainActivity : AppCompatActivity() {
     private val RC_SIGNUP: Int = 200
     var signup = false
     val auth = FirebaseAuth.getInstance()
+    val funtions = listOf<String>(
+        "Camera",
+        "Invite friend",
+        "Parking",
+        "Download coupons",
+        "News",
+        "A",
+        "B",
+        "News",
+        "News",
+        "News",
+        "Maps"
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +74,31 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+//        RecyclerView
+        with(recycler) {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            setHasFixedSize(true)
+        }
+        recycler.adapter = FuntionAdapter()
+
+    }
+
+    inner class FuntionAdapter : RecyclerView.Adapter<FuntionHolder>() {
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FuntionHolder {
+            val view = LayoutInflater.from(parent.context).inflate(R.layout.row_funtion, parent, false)
+            return FuntionHolder(view)
+        }
+
+        override fun getItemCount(): Int = funtions.size
+
+        override fun onBindViewHolder(holder: FuntionHolder, position: Int) {
+            holder.nameText.text = funtions[position]
+        }
+
+    }
+
+    class FuntionHolder(view: View) : RecyclerView.ViewHolder(view) {
+        var nameText = view.tv_name
     }
 
     override fun onResume() {
