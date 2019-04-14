@@ -8,28 +8,38 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_movie.*
 import kotlinx.android.synthetic.main.row_movie.view.*
 import org.jetbrains.anko.AnkoLogger
 import org.jetbrains.anko.doAsync
 import org.jetbrains.anko.info
 import org.jetbrains.anko.uiThread
-import java.net.URL
+import retrofit2.Call
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
 
 class MovieActivity : AppCompatActivity(), AnkoLogger {
 
     var movies: List<Movie>? = null
+    val retrofit = Retrofit.Builder()
+        .baseUrl("https://api.myjson.com/bins/")
+        .addConverterFactory(GsonConverterFactory.create())
+        .build()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie)
         doAsync {
-            val json = URL("https://api.myjson.com/bins/1727dw").readText()
-            movies = Gson().fromJson<List<Movie>>(
-                json,
-                object : TypeToken<List<Movie>>() {}.type
-            )
+            //            val json = URL("https://api.myjson.com/bins/1727dw").readText()
+//            movies = Gson().fromJson<List<Movie>>(
+//                json,
+//                object : TypeToken<List<Movie>>() {}.type
+//            )
+            val movieService = retrofit.create(MovieService::class.java)
+            movies = movieService.listMovies()
+                .execute()
+                .body()
             movies?.forEach {
                 info("${it.Title}   ${it.imdbRating}    ${it.Director}")
             }
@@ -99,3 +109,8 @@ data class Movie(
     val imdbVotes: String,
     val totalSeasons: String
 )
+
+interface MovieService {
+    @GET("1727dw")
+    fun listMovies(): Call<List<Movie>>
+}
