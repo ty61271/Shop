@@ -3,29 +3,49 @@ package com.west.pratice.shop
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 
 class MainActivity : AppCompatActivity() {
     private val RC_NICK: Int = 210
     private val RC_SIGNUP: Int = 200
     var signup = false
+    val auth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
-        if (!signup) {
+        /*if (!signup) {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivityForResult(intent, RC_SIGNUP)
+        }*/
+        auth.addAuthStateListener { auth ->
+            authChanged(auth)
         }
-
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        nickname.text = getNickname()
+    }
+
+    private fun authChanged(auth: FirebaseAuth) {
+        if (auth.currentUser == null) {
+            val intent = Intent(this, SignUpActivity::class.java)
+            startActivityForResult(intent, RC_SIGNUP)
+        } else {
+            Log.d("MainActivity", "authChanged: ${auth.currentUser?.uid}")
         }
     }
 

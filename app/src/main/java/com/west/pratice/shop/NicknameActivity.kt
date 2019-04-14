@@ -12,10 +12,7 @@ class NicknameActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_nickname)
         done.setOnClickListener {
-            getSharedPreferences("shop", Context.MODE_PRIVATE)
-                .edit()
-                .putString("NICKNAME", nick.text.toString())
-                .apply()
+            setNickname(nick.text.toString())
             setResult(Activity.RESULT_OK)
             finish()
         }
