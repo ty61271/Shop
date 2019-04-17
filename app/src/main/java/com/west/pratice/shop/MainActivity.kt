@@ -26,6 +26,8 @@ class MainActivity : AppCompatActivity() {
     private val RC_NICK: Int = 210
     private val RC_SIGNUP: Int = 200
     var signup = false
+    var cacheService: Intent? = null
+
     val auth = FirebaseAuth.getInstance()
     val funtions = listOf<String>(
         "Camera",
@@ -166,7 +168,19 @@ class MainActivity : AppCompatActivity() {
         // as you specify a parent activity in AndroidManifest.xml.
         return when (item.itemId) {
             R.id.action_settings -> true
+            R.id.action_cache -> {
+                cacheService = Intent(this, CacheService::class.java)
+                startService(cacheService)
+                startService(Intent(this, CacheService::class.java))
+                startService(Intent(this, CacheService::class.java))
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        stopService(cacheService)
     }
 }
