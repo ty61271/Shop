@@ -1,7 +1,10 @@
 package com.west.pratice.shop
 
 import android.app.Activity
+import android.content.BroadcastReceiver
+import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.os.Bundle
 import android.util.Log
 import android.view.*
@@ -16,11 +19,15 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.row_funtion.view.*
+import org.jetbrains.anko.*
+import java.net.URL
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity() ,AnkoLogger{
 
     private val TAG = MainActivity::class.java.simpleName
     private val RC_NICK: Int = 210
@@ -162,6 +169,15 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    val broadcastReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == CacheService.ACTION_CACHE_DONE) {
+//                toast("MainActivity cache informed ")
+                info("MainActivity cache informed")
+            }
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
@@ -169,18 +185,36 @@ class MainActivity : AppCompatActivity() {
         return when (item.itemId) {
             R.id.action_settings -> true
             R.id.action_cache -> {
-                cacheService = Intent(this, CacheService::class.java)
-                startService(cacheService)
-                startService(Intent(this, CacheService::class.java))
-                startService(Intent(this, CacheService::class.java))
+                doAsync {
+                    val json = URL("https://api.myjson.com/bins/1727dw").readText()
+                    val movies = Gson().fromJson<List<Movie>>(
+                        json,
+                        object : TypeToken<List<Movie>>() {}.type
+                    )
+                    movies.forEach {
+                        startService(
+                            intentFor<CacheService>(
+                                "TITLE" to it.Title,
+                                "IMAGE" to it.Images[0]
+                            )
+                        )
+                    }
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
+    override fun onStart() {
+        super.onStart()
+        val filter = IntentFilter(CacheService.ACTION_CACHE_DONE)
+        registerReceiver(broadcastReceiver, filter)
+    }
+
     override fun onStop() {
         super.onStop()
-        stopService(cacheService)
+//        stopService(cacheService)
+        unregisterReceiver(broadcastReceiver)
     }
 }
