@@ -25,10 +25,13 @@ import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.row_funtion.view.*
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoLogger
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.info
+import org.jetbrains.anko.intentFor
 import java.net.URL
 
-class MainActivity : AppCompatActivity(),AnkoLogger {
+class MainActivity : AppCompatActivity(), AnkoLogger {
     private val TAG = MainActivity::class.java.simpleName
     private val RC_NICK: Int = 210
     private val RC_SIGNUP: Int = 200
@@ -43,10 +46,7 @@ class MainActivity : AppCompatActivity(),AnkoLogger {
         "Download coupons",
         "News",
         "Movies",
-        "Maps",
-        "News",
-        "News",
-        "News"
+        "Maps"
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -126,21 +126,23 @@ class MainActivity : AppCompatActivity(),AnkoLogger {
     override fun onResume() {
         super.onResume()
 //        nickname.text = getNickname()
+        if (auth.currentUser != null) {
+            FirebaseDatabase.getInstance()
+                .getReference("users")
+                .child(auth.currentUser!!.uid)
+                .child("nickname")
+                .addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onCancelled(error: DatabaseError) {
+                        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                    }
 
-//        FirebaseDatabase.getInstance()
-//            .getReference("users")
-//            .child(auth.currentUser!!.uid)
-//            .child("nickname")
-//            .addListenerForSingleValueEvent(object : ValueEventListener {
-//                override fun onCancelled(error: DatabaseError) {
-//                    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//                }
-//
-//                override fun onDataChange(dataSnapshot: DataSnapshot) {
-//                    nickname.text = dataSnapshot.value as String
-//                }
-//
-//            })
+                    override fun onDataChange(dataSnapshot: DataSnapshot) {
+                        if (dataSnapshot.value != null)
+                            nickname.text = dataSnapshot.value as String
+                    }
+
+                })
+        }
     }
 
     private fun authChanged(auth: FirebaseAuth) {
