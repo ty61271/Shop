@@ -43,11 +43,10 @@ class MainActivity : AppCompatActivity() ,AnkoLogger{
         "Download coupons",
         "News",
         "Movies",
-        "B",
+        "Maps",
         "News",
         "News",
-        "News",
-        "Maps"
+        "News"
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -117,6 +116,7 @@ class MainActivity : AppCompatActivity() ,AnkoLogger{
             2 -> startActivity(Intent(this, ParkingActivity::class.java))
             4 -> startActivity(Intent(this, NewsActivity::class.java))
             5 -> startActivity(Intent(this, MovieActivity::class.java))
+            6 -> startActivity(Intent(this, MapsActivity::class.java))
         }
     }
 
